@@ -1,16 +1,8 @@
 # wxcloudrun-dotnet
 
-[![GitHub license](https://img.shields.io/github/license/WeixinCloud/wxcloudrun-dotnet)](https://github.com/WeixinCloud/wxcloudrun-dotnet)
-
-微信云托管 .NET Core 框架模版，实现简单的计数器读写接口，使用云托管 MySQL 读写、记录计数值。
-
-![](https://qcloudimg.tencent-cloud.cn/raw/be22992d297d1b9a1a5365e606276781.png)
-
 ## 快速开始
-前往 [微信云托管快速开始页面](https://cloud.weixin.qq.com/cloudrun/onekey)，选择相应语言的模板，根据引导完成部署。
 
 ## 本地调试
-下载代码在本地调试，请参考[微信云托管本地调试指南](https://developers.weixin.qq.com/miniprogram/dev/wxcloudrun/src/guide/debug/)。
 
 ## 项目结构说明
 
