@@ -12,7 +12,6 @@ namespace aspnetapp
     
     public class User
     {
-        public int Id { get; set; }
         public string OpenId { get; set; } = null!;
         public string Token { get; set; } = null!;
         public DateTime LastActiveAt { get; set; }
@@ -20,9 +19,7 @@ namespace aspnetapp
 
     public class GameData
     {
-        public int Id { get; set; }
-        public int UserId { get; set; }
-        public string Key { get; set; } = null!;
+        public string UserId { get; set; }
         public string Value { get; set; } = null!;
     }
 

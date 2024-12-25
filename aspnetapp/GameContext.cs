@@ -18,7 +18,7 @@ public partial class GameContext : DbContext
             var addressParts = Environment.GetEnvironmentVariable("MYSQL_ADDRESS")?.Split(':');
             var host = addressParts?[0];
             var port = addressParts?[1];
-            var connstr = $"server={host};port={port};user={username};password={password};database=aspnet_demo";
+            var connstr = $"server={host};port={port};user={username};password={password};database=game";
             optionsBuilder.UseMySql(connstr, Microsoft.EntityFrameworkCore.ServerVersion.Parse("5.7.18-mysql"));
         }
     }
@@ -26,13 +26,13 @@ public partial class GameContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>()
-            .ToTable("Users")
+            .ToTable("User")
             .HasIndex(u => u.OpenId)
             .IsUnique();
 
         modelBuilder.Entity<GameData>()
             .ToTable("GameData")
-            .HasIndex(g => new { g.UserId, g.Key })
+            .HasIndex(g => new { g.UserId })
             .IsUnique();
 
         base.OnModelCreating(modelBuilder);
