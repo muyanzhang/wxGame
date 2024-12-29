@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Text;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -81,11 +82,11 @@ namespace aspnetapp.Controllers
                 else
                 {
                     // 如果用户已存在，则更新 Token 和活动时间
-                    user.token = Guid.NewGuid().ToString();
+                    user.token = Guid.NewGuid().ToString("N");
                     user.loginTime = DateTime.Now;
                     var data = await _context.GameData.Where(d => d.userId == user.userId).FirstOrDefaultAsync();
                     if (data != null)
-                        res.data =  Convert.ToBase64String(data.data);
+                        res.data = Encoding.UTF8.GetString(data.data);
                     await _context.SaveChangesAsync();
                 }
 
@@ -131,7 +132,7 @@ namespace aspnetapp.Controllers
         {
             var user = await GetAuthenticatedUser(req.token);
             if (user == null)
-                return Unauthorized("token invalidation");
+                return Unauthorized(new { code = 401, message = "Authentication failed. Invalid token." });
 
             var gameData = await _context.GameData
                 .FirstOrDefaultAsync(d => d.userId == user.userId);
@@ -139,7 +140,7 @@ namespace aspnetapp.Controllers
             if (gameData != null)
             {
                 // 更新数据
-                gameData.data = Convert.FromBase64String(req.data);
+                gameData.data = Encoding.UTF8.GetBytes(req.data);
             }
             else
             {
@@ -147,12 +148,12 @@ namespace aspnetapp.Controllers
                 _context.GameData.Add(new GameData
                 {
                     userId = user.userId,
-                    data = Convert.FromBase64String(req.data)
+                    data = Encoding.UTF8.GetBytes(req.data)
                 });
             }
 
             await _context.SaveChangesAsync();
-            return Ok();
+            return Ok(new { code = 200, message = "Data uploaded successfully." });
         }
     }
 }
