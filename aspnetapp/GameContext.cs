@@ -26,13 +26,13 @@ public partial class GameContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>()
-            .ToTable("Users")
+            .ToTable("User")
             .HasIndex(u => u.OpenId)
             .IsUnique();
 
         modelBuilder.Entity<GameData>()
             .ToTable("GameData")
-            .HasIndex(g => new { g.UserId, g.Key })
+            .HasIndex(g => new { g.UserId })
             .IsUnique();
 
         base.OnModelCreating(modelBuilder);

@@ -94,7 +94,7 @@ namespace aspnetapp.Controllers
             if (user == null)
                 return Unauthorized();
 
-            var data = await _context.GameData.Where(d => d.UserId == user.Id).ToListAsync();
+            var data = await _context.GameData.Where(d => d.UserId == user.OpenId).ToListAsync();
             return Ok(data);
         }
 
@@ -108,7 +108,7 @@ namespace aspnetapp.Controllers
             foreach (var entry in data)
             {
                 var existingData = await _context.GameData
-                    .FirstOrDefaultAsync(d => d.UserId == user.Id && d.Key == entry.Key);
+                    .FirstOrDefaultAsync(d => d.UserId == user.OpenId);
 
                 if (existingData != null)
                 {
@@ -120,8 +120,7 @@ namespace aspnetapp.Controllers
                     // 插入新数据
                     _context.GameData.Add(new GameData
                     {
-                        UserId = user.Id,
-                        Key = entry.Key,
+                        UserId = user.OpenId,
                         Value = entry.Value
                     });
                 }
