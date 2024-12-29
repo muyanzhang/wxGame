@@ -12,7 +12,7 @@ namespace aspnetapp.Controllers
 
         private static string APP_ID = "wx4f4a03bbd5832f0e";
         private static string APP_SECRET = "866d21ab3b280f3b891121db18ee77fe";
-        
+
         public class LoginRequest
         {
             public string code { get; set; } = null!;
@@ -45,6 +45,9 @@ namespace aspnetapp.Controllers
 
             try
             {
+#if DEBUG
+                var openId = req.code;
+#else
                 // 使用微信的接口获取 openid
                 // 假设你已经有了微信的 appId 和 appSecret
                 var url =
@@ -57,15 +60,17 @@ namespace aspnetapp.Controllers
                 var responseData = JsonSerializer.Deserialize<WeChatResponse>(response);
                 if(responseData == null || string.IsNullOrEmpty(responseData.OpenId))
                     return BadRequest("OpenId is Null");
+                var openId = responseData.OpenId;
+#endif
                 // 查找用户
-                var user = await _context.Users.FirstOrDefaultAsync(u => u.openId == responseData.OpenId);
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.openId == openId);
                 var res = new LoginResponse();
                 if (user == null)
                 {
                     // 如果用户不存在，则创建新用户
                     user = new Account
                     {
-                        openId = responseData.OpenId,
+                        openId = openId,
                         userId = Guid.NewGuid().ToString("N").Substring(0, 24),
                         token = Guid.NewGuid().ToString("N"),
                         loginTime = DateTime.Now
@@ -79,8 +84,8 @@ namespace aspnetapp.Controllers
                     user.token = Guid.NewGuid().ToString();
                     user.loginTime = DateTime.Now;
                     var data = await _context.GameData.Where(d => d.userId == user.userId).FirstOrDefaultAsync();
-                    if(data != null)
-                        res.data = data.data;
+                    if (data != null)
+                        res.data =  Convert.ToBase64String(data.data);
                     await _context.SaveChangesAsync();
                 }
 
@@ -94,9 +99,7 @@ namespace aspnetapp.Controllers
             }
         }
     }
-    
-    
-  
+
 
     [Route("api/data")]
     [ApiController]
@@ -116,7 +119,7 @@ namespace aspnetapp.Controllers
 
             return await _context.Users.FirstOrDefaultAsync(u => u.token == token);
         }
-        
+
         public class UploadRequest
         {
             public string token { get; set; } = null!;
@@ -128,7 +131,7 @@ namespace aspnetapp.Controllers
         {
             var user = await GetAuthenticatedUser(req.token);
             if (user == null)
-                return Unauthorized();
+                return Unauthorized("token invalidation");
 
             var gameData = await _context.GameData
                 .FirstOrDefaultAsync(d => d.userId == user.userId);
@@ -136,7 +139,7 @@ namespace aspnetapp.Controllers
             if (gameData != null)
             {
                 // 更新数据
-                gameData.data = req.data;
+                gameData.data = Convert.FromBase64String(req.data);
             }
             else
             {
@@ -144,7 +147,7 @@ namespace aspnetapp.Controllers
                 _context.GameData.Add(new GameData
                 {
                     userId = user.userId,
-                    data = req.data
+                    data = Convert.FromBase64String(req.data)
                 });
             }
 

@@ -15,30 +15,34 @@
 */
 
 SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
+SET
+FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
 -- Table structure for account
 -- ----------------------------
 DROP TABLE IF EXISTS `account`;
-CREATE TABLE `account`  (
-  `userId` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `openId` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `token` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `loginTime` datetime NULL DEFAULT NULL,
-  PRIMARY KEY (`userId`) USING BTREE,
-  UNIQUE INDEX `idx_open_id`(`openId`) USING BTREE,
-  UNIQUE INDEX `idx_token`(`token`) USING BTREE
+CREATE TABLE `account`
+(
+    `userId`    varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+    `openId`    varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+    `token`     varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+    `loginTime` datetime NULL DEFAULT NULL,
+    PRIMARY KEY (`userId`) USING BTREE,
+    UNIQUE INDEX `idx_open_id`(`openId`) USING BTREE,
+    UNIQUE INDEX `idx_token`(`token`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for gamedata
 -- ----------------------------
 DROP TABLE IF EXISTS `gamedata`;
-CREATE TABLE `gamedata`  (
-  `userId` int(11) NOT NULL,
-  `data` blob NULL,
-  PRIMARY KEY (`userId`) USING BTREE
+CREATE TABLE `gamedata`
+(
+    `userId`    varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+    `data`   blob NULL,
+    PRIMARY KEY (`userId`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
-SET FOREIGN_KEY_CHECKS = 1;
+SET
+FOREIGN_KEY_CHECKS = 1;

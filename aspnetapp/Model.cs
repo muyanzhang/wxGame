@@ -14,6 +14,6 @@ namespace aspnetapp
     public class GameData
     {
         [Key] public string userId { get; set; } = null!;
-        public string data { get; set; } = null!;
+        public byte[] data { get; set; } = null!;
     }
 }
