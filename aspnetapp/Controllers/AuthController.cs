@@ -17,23 +17,30 @@ namespace aspnetapp.Controllers
         {
             _context = context;
         }
+        
+        public class LoginRequest {
+            public string openId { get; set; }
+        }
+        public class LoginResponse {
+            public string token { get; set; }
+        }
 
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login([FromBody] string openId)
+        public async Task<ActionResult<LoginResponse>> Login(LoginRequest req)
         {
             // 模拟微信登录逻辑 (生产环境需调用微信接口获取 openId)
-            if (string.IsNullOrWhiteSpace(openId))
+            if (string.IsNullOrWhiteSpace(req.openId))
                 return BadRequest("Invalid OpenId");
 
             // 查找用户
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.OpenId == openId);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.OpenId == req.openId);
 
             if (user == null)
             {
                 // 如果用户不存在，则创建新用户
                 user = new User
                 {
-                    OpenId = openId,
+                    OpenId = req.openId,
                     Token = Guid.NewGuid().ToString(),
                     LastActiveAt = DateTime.Now
                 };
@@ -48,7 +55,7 @@ namespace aspnetapp.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            return Ok(user.Token);
+            return new LoginResponse { token = user.Token };
         }
 
         [HttpPost("validate")]
