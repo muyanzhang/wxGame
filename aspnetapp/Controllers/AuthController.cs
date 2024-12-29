@@ -15,20 +15,20 @@ namespace aspnetapp.Controllers
         
         public class LoginRequest
         {
-            public string code { get; set; }
+            public string code { get; set; } = null!;
         }
 
         public class LoginResponse
         {
-            public string token { get; set; }
-            public string data { get; set; }
+            public string token { get; set; } = null!;
+            public string data { get; set; } = null!;
         }
 
         public class WeChatResponse
         {
-            public string OpenId { get; set; }
-            public string SessionKey { get; set; }
-            public string UnionId { get; set; }
+            public string OpenId { get; set; } = null!;
+            public string SessionKey { get; set; } = null!;
+            public string UnionId { get; set; } = null!;
         }
 
         public AuthController(GameContext context)
@@ -79,7 +79,8 @@ namespace aspnetapp.Controllers
                     user.token = Guid.NewGuid().ToString();
                     user.loginTime = DateTime.Now;
                     var data = await _context.GameData.Where(d => d.userId == user.userId).FirstOrDefaultAsync();
-                    res.data = data.data;
+                    if(data != null)
+                        res.data = data.data;
                     await _context.SaveChangesAsync();
                 }
 
@@ -118,8 +119,8 @@ namespace aspnetapp.Controllers
         
         public class UploadRequest
         {
-            public string token { get; set; }
-            public string data { get; set; }
+            public string token { get; set; } = null!;
+            public string data { get; set; } = null!;
         }
 
         [HttpPost("upload")]
