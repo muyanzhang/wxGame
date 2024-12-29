@@ -5,6 +5,13 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+public class LoginRequest {
+    public string openId { get; set; }
+}
+public class LoginResponse {
+    public string token { get; set; }
+}
+
 namespace aspnetapp.Controllers
 {
     [Route("api/auth")]
@@ -16,13 +23,6 @@ namespace aspnetapp.Controllers
         public AuthController(GameContext context)
         {
             _context = context;
-        }
-        
-        public class LoginRequest {
-            public string openId { get; set; }
-        }
-        public class LoginResponse {
-            public string token { get; set; }
         }
 
         [HttpPost("login")]
