@@ -10,8 +10,8 @@ namespace aspnetapp.Controllers
     {
         private readonly GameContext _context;
 
-        private static string APP_ID = "";
-        private static string APP_SECRET = "";
+        private static string APP_ID = "wx4f4a03bbd5832f0e";
+        private static string APP_SECRET = "866d21ab3b280f3b891121db18ee77fe";
         
         public class LoginRequest
         {
