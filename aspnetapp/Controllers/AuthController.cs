@@ -27,9 +27,9 @@ namespace aspnetapp.Controllers
 
         public class WeChatResponse
         {
-            public string OpenId { get; set; } = null!;
-            public string SessionKey { get; set; } = null!;
-            public string UnionId { get; set; } = null!;
+            public string openid { get; set; } = null!;
+            public string session_key { get; set; } = null!;
+            public string unionid { get; set; } = null!;
         }
 
         public AuthController(GameContext context)
@@ -61,9 +61,9 @@ namespace aspnetapp.Controllers
 
                 // 解析返回的 JSON 获取 openid
                 var responseData = JsonSerializer.Deserialize<WeChatResponse>(response);
-                if(responseData == null || string.IsNullOrEmpty(responseData.OpenId))
+                if(responseData == null || string.IsNullOrEmpty(responseData.openid))
                     return BadRequest("OpenId is Null");
-                var openId = responseData.OpenId;
+                var openId = responseData.openid;
 #endif
                 // 查找用户
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.openId == openId);
