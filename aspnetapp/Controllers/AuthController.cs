@@ -54,8 +54,10 @@ namespace aspnetapp.Controllers
                 var url =
                     $"https://api.weixin.qq.com/sns/jscode2session?appid={APP_ID}&secret={APP_SECRET}&js_code={req.code}&grant_type=authorization_code";
 
+                Console.WriteLine(url);
                 var client = new HttpClient();
                 var response = await client.GetStringAsync(url);
+                Console.WriteLine(response);
 
                 // 解析返回的 JSON 获取 openid
                 var responseData = JsonSerializer.Deserialize<WeChatResponse>(response);
